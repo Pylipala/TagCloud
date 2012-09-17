@@ -2,4 +2,4 @@ Why would you use this App?
 
 View common tags and the artifacts they link to.
 
-![Alt text](https://github.com/RallyCommunity/TagCloud/Screenshot.png)
+![Alt text](https://github.com/RallyCommunity/TagCloud/blob/master/Screenshot.png)

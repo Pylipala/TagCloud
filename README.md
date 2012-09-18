@@ -1,5 +1,5 @@
 Why would you use this App?
 
-View common tags and the artifacts they link to.
+View tags by frequency and the artifacts they link to.
 
 ![Alt text](https://raw.github.com/RallyCommunity/TagCloud/master/Screenshot.png)

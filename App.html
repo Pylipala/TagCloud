@@ -118,13 +118,13 @@ Rally.onReady(function() {
        // get a list of the tags from the Lookback API, iterating if necessary (see _buildTagMap)
        _queryForTags: function(start, app, callback) {
    	var params = {
-   	    find: "{'Tags':{'$exists':true}, '__At':'current', '_Type':'HierarchicalRequirement', '_ProjectHierarchy':"+ this.getContext().getProject().ObjectID +" }",
+   	    find: "{'Tags':{'$exists':true}, '__At':'current', '_TypeHierarchy':-51038, '_ProjectHierarchy':"+ this.getContext().getProject().ObjectID +" }",
    	    fields: "['Tags']",
    	    pagesize: 20000,
    	    start: start
    	};
    	Ext.Ajax.request({
-   	    url: 'https://rally1.rallydev.com/analytics/1.32/'+ this.context.getWorkspace().ObjectID + '/artifact/snapshot/query.js',
+   	    url: 'https://rally1.rallydev.com/analytics/v2.0/service/rally/workspace/'+ this.context.getWorkspace().ObjectID + '/artifact/snapshot/query.js',
    	    method: 'GET',
    	    params: params,
    	    withCredentials: true,

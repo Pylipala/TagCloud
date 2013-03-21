@@ -44,7 +44,11 @@ Ext.define('CustomApp', {
 	if(response.StartIndex+response.PageSize < response.TotalResultCount) {
 	    app._queryForTagNames(response.StartIndex+response.PageSize, app, app._buildCloud);
 	} else {
-	    if(app.tagMap.length === 0) {
+            var len = 0, key;
+            for (key in app.tagMap) {
+                 if (app.tagMap.hasOwnProperty(key)) len++;
+            }
+            if(len === 0) {
 		tag = new Ext.form.Label({
 			id: 'tagNone',
 			text: '  No tagged Stories found  '

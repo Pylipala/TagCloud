@@ -154,67 +154,48 @@ Rally.onReady(function() {
        },
    
        _queryForStories: function(tagOid) {
-   	Ext.create('Rally.data.WsapiDataStore', {
-   	    model: 'UserStory',
-   	    autoLoad: true,
-   	    fetch: ['Rank', 'FormattedID', 'Name', 'ScheduleState'],
-   	    filters: [{ 
-   		property:'Tags',
-   		operator: '=',
-   		value: "tag/" + tagOid
-   	    }],
-   	    sorters: [{
-   		property: 'Rank',
-   		direction: 'ASC'
-   	    }],
-   	    listeners: {
-   		load: this._onDataLoaded,
-   		scope: this
-   	    }
-   	});
+   		Rally.data.ModelFactory.getModel({
+   			type: 'UserStory',
+   			success: function(model) {
+   				this.down('#grid').removeAll();
+   				this.grid = this.down('#grid').add({
+   					xtype: 'rallygrid',
+   					model: model,
+   					multiSelect: true,
+   					columnCfgs: [
+   						'FormattedID',
+   						'Name',
+   						'Owner'
+   					],
+   					storeConfig: {
+   					    filters: [
+   						{
+   						property:'Tags',
+   						operator: '=',
+   						value: "tag/" + tagOid
+   						}
+   					    ],
+   					    listeners: {
+                            			 load: this._loaded,
+   						 scope: this
+                        		    }
+   					}
+   				});
+   			},
+   			scope: this
+   		});
        },
+   	_loaded: function() {
+   		this.getComponent('grid').setLoading(false);
+   		this.getComponent('grid').setTitle('Stories tagged: ' + this.tagName);
+   	},
        
        _tagSelected: function(app, elem) {
-   	this.getComponent('grid').setLoading();
-   	this._queryForStories(elem.id.substring(3)); // cheesy, id is "tag"+tagOid, we need the oid
-   	this.tagName = elem.innerText;
+   		this.getComponent('grid').setLoading();
+   		this._queryForStories(elem.id.substring(3)); // cheesy, id is "tag"+tagOid, we need the oid
+   		this.tagName = elem.innerText;
        },
        
-       _onDataLoaded: function(store, data) {
-   	var records = [], rankIndex = 1;
-   	Ext.Array.each(data, function(record) {
-   	    records.push({
-   		Ranking: rankIndex,
-   		FormattedID: record.get('FormattedID'),
-   		Name: record.get('Name'),
-   		State: record.get('ScheduleState')
-   	    });
-   	    rankIndex++;
-   	});
-   
-   	var customStore = Ext.create('Rally.data.custom.Store', {
-   	    data: records,
-   	    pageSize: 25
-   	});
-   
-   	if(!this.grid) {
-   	    this.grid = this.down('#grid').add({
-   		xtype: 'rallygrid',
-   		store: customStore,
-   		columnCfgs: [
-   		    { text: 'Ranking', dataIndex: 'Ranking' },
-   		    { text: 'ID', dataIndex: 'FormattedID' },
-   		    { text: 'Name', dataIndex: 'Name', flex: 1 },
-   		    { text: 'State', dataIndex: 'State' }
-   		]
-   	    });
-   	} else {
-   	    this.grid.reconfigure(customStore);
-   	}
-   	this.getComponent('grid').setTitle('Stories tagged: ' + this.tagName);
-   	this.getComponent('grid').setLoading(false);
-       },
-   		    
        launch: function() {
    	this._queryForTags(0, this, this._buildTagMap);
        }

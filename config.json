@@ -1,7 +1,7 @@
 {
 "name": "TagCloud",
 "className": "CustomApp",
-"sdk": "2.0p",
+"sdk": "2.0rc1",
 "javascript": [
 "App.js"
 ],
